@@ -26,8 +26,8 @@ addEventListener("resize", () => {
   init();
 });
 
-// Objects
-class Object {
+// Class Objects
+class Circle {
   constructor(x, y, radius, color) {
     this.x = x;
     this.y = y;
@@ -49,13 +49,11 @@ class Object {
 }
 
 // Implementation
-let objects;
-function init() {
-  objects = [];
+let circle1, circle2;
 
-  for (let i = 0; i < 400; i++) {
-    // objects.push()
-  }
+function init() {
+  circle1 = new Circle(300, 300, 100, "black");
+  circle2 = new Circle(undefined, undefined, 30, "red");
 }
 
 // Animation Loop
@@ -63,7 +61,22 @@ function animate() {
   requestAnimationFrame(animate);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillText("HTML CANVAS BOILERPLATE", mouse.x, mouse.y);
+  circle1.update();
+
+  circle2.x = mouse.x;
+  circle2.y = mouse.y;
+  circle2.update();
+
+  let dist = distance(circle1.x, circle1.y, circle2.x, circle2.y);
+
+  if (dist < circle1.radius + circle2.radius) {
+    circle1.color = "red";
+  } else {
+    circle1.color = "black";
+  }
+
+  // ctx.fillText("HTML CANVAS BOILERPLATE", mouse.x, mouse.y);
+
   // objects.forEach(object => {
   //  object.update()
   // })
