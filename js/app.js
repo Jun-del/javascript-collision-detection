@@ -17,7 +17,7 @@ const mouse = {
   y: innerHeight / 2,
 };
 
-const colors = ["#2185C5", "#7ECEFD", "#FFF6E5", "#FF7F66"];
+const colors = ["#2185C5", "#7ECEFD", "#FF7F66"];
 
 // Event Listeners
 addEventListener("mousemove", (event) => {
@@ -40,10 +40,8 @@ class Object {
     this.y = y;
     this.velocity = {
       // Random value between -0.5 and 0.5
-      // x: Math.random() - 0.5,
-      // y: Math.random() - 0.5,
-      x: Math.random() + 1,
-      y: Math.random() + 1,
+      x: Math.random() - 0.5,
+      y: Math.random() - 0.5,
     };
 
     this.radius = radius;
@@ -54,9 +52,10 @@ class Object {
   draw() {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    ctx.fillStyle = this.color;
     // ctx.fill();
+    ctx.fillStyle = this.color;
     ctx.stroke();
+    ctx.strokeStyle = this.color;
     ctx.closePath();
   }
 
@@ -98,11 +97,11 @@ let objects;
 function init() {
   objects = [];
 
-  for (let i = 0; i < 10; i++) {
-    const radius = 100;
+  for (let i = 0; i < 200; i++) {
+    const radius = 15;
     let x = randomIntFromRange(radius, canvas.width - radius);
     let y = randomIntFromRange(radius, canvas.height - radius);
-    const color = "black";
+    const color = randomColor(colors);
 
     // If not the first object
     if (i !== 0) {
