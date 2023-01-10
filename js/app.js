@@ -1,4 +1,10 @@
-import { randomIntFromRange, randomColor, distance } from "./utils.js";
+import {
+  randomIntFromRange,
+  randomColor,
+  distance,
+  rotate,
+  resolveCollision,
+} from "./utils.js";
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
@@ -15,6 +21,7 @@ const colors = ["#2185C5", "#7ECEFD", "#FFF6E5", "#FF7F66"];
 
 // Event Listeners
 addEventListener("mousemove", (event) => {
+  event.preventDefault();
   mouse.x = event.clientX;
   mouse.y = event.clientY;
 });
@@ -33,12 +40,15 @@ class Object {
     this.y = y;
     this.velocity = {
       // Random value between -0.5 and 0.5
-      x: Math.random() - 0.5,
-      y: Math.random() - 0.5,
+      // x: Math.random() - 0.5,
+      // y: Math.random() - 0.5,
+      x: Math.random() + 1,
+      y: Math.random() + 1,
     };
 
     this.radius = radius;
     this.color = color;
+    this.mass = 1;
   }
 
   draw() {
@@ -63,7 +73,7 @@ class Object {
         distance(this.x, this.y, objects[i].x, objects[i].y) - this.radius * 2 <
         0
       ) {
-        console.log("colliding");
+        resolveCollision(this, objects[i]);
       }
     }
 
@@ -88,8 +98,8 @@ let objects;
 function init() {
   objects = [];
 
-  for (let i = 0; i < 400; i++) {
-    const radius = 10;
+  for (let i = 0; i < 10; i++) {
+    const radius = 100;
     let x = randomIntFromRange(radius, canvas.width - radius);
     let y = randomIntFromRange(radius, canvas.height - radius);
     const color = "black";
