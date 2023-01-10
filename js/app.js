@@ -31,6 +31,12 @@ class Object {
   constructor(x, y, radius, color) {
     this.x = x;
     this.y = y;
+    this.velocity = {
+      // Random value between -0.5 and 0.5
+      x: Math.random() - 0.5,
+      y: Math.random() - 0.5,
+    };
+
     this.radius = radius;
     this.color = color;
   }
@@ -44,8 +50,33 @@ class Object {
     ctx.closePath();
   }
 
-  update() {
+  update(objects) {
     this.draw();
+
+    // Loop through all the circles in the array
+    for (let i = 0; i < objects.length; i++) {
+      // Skip the current object in the loop if it is the same object
+      if (this === objects[i]) continue;
+
+      // If the distance between the two circles (objects) is less than the sum of the two radii, they are colliding
+      if (
+        distance(this.x, this.y, objects[i].x, objects[i].y) - this.radius * 2 <
+        0
+      ) {
+        console.log("colliding");
+      }
+    }
+
+    // If the circles collide with the border, reverse the velocity
+    if (this.x + this.radius > innerWidth || this.x - this.radius < 0) {
+      this.velocity.x = -this.velocity.x;
+    }
+    if (this.y + this.radius > innerHeight || this.y - this.radius < 0) {
+      this.velocity.y = -this.velocity.y;
+    }
+
+    this.x += this.velocity.x;
+    this.y += this.velocity.y;
   }
 }
 
@@ -67,7 +98,7 @@ function init() {
     if (i !== 0) {
       // For objects that are not the first object / already exist
       for (let j = 0; j < objects.length; j++) {
-        // If Pythagorean Theorem distance is less than the sum of the two radii
+        // Check if the new circle is colliding with any other cirlces
         if (distance(x, y, objects[j].x, objects[j].y) - radius * 2 < 0) {
           x = randomIntFromRange(radius, canvas.width - radius);
           y = randomIntFromRange(radius, canvas.height - radius);
@@ -89,7 +120,7 @@ function animate() {
   //   ctx.fillText("HTML CANVAS BOILERPLATE", mouse.x, mouse.y);
 
   objects.forEach((object) => {
-    object.update();
+    object.update(objects);
   });
 }
 
