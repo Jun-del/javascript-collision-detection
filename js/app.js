@@ -38,24 +38,35 @@ class Object {
   constructor(x, y, radius, color) {
     this.x = x;
     this.y = y;
+    this.radius = radius;
+    this.color = color;
+
     this.velocity = {
       // Random value between -0.5 and 0.5
       x: Math.random() - 0.5,
       y: Math.random() - 0.5,
     };
-
-    this.radius = radius;
-    this.color = color;
     this.mass = 1;
+    this.opacity = 0;
   }
 
   draw() {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    // ctx.fill();
+
+    ctx.save();
+
+    // Opacity
+    ctx.globalAlpha = this.opacity;
+
     ctx.fillStyle = this.color;
-    ctx.stroke();
+    ctx.fill();
+
+    ctx.restore();
+
     ctx.strokeStyle = this.color;
+    ctx.stroke();
+
     ctx.closePath();
   }
 
@@ -84,6 +95,22 @@ class Object {
       this.velocity.y = -this.velocity.y;
     }
 
+    // Mouse collision detection
+    // If the mouse is within mouseRad px of the circle, increase the opacity
+    const mouseRad = 80;
+    if (
+      distance(mouse.x, mouse.y, this.x, this.y) < mouseRad &&
+      this.opacity < 1
+    ) {
+      this.opacity += 0.02;
+    } else if (this.opacity > 0) {
+      this.opacity -= 0.02;
+
+      // Math.max() returns the largest of zero or the value of its opacity
+      this.opacity = Math.max(0, this.opacity);
+    }
+
+    // Move the circle
     this.x += this.velocity.x;
     this.y += this.velocity.y;
   }
