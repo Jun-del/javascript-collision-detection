@@ -72,13 +72,26 @@ function animate() {
 	ctx.fillStyle = "#1A1A23";
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+	const blueRectX = canvas.width / 2 - 50;
+	const blueRectY = canvas.height / 2 - 50;
+
+	// Conditional statement
+	if (
+		mouse.x + 100 >= blueRectX &&
+		mouse.x <= blueRectX + 100 &&
+		mouse.y + 100 >= blueRectY &&
+		mouse.y <= blueRectY + 100
+	) {
+		console.log("collide");
+	}
+
 	// Red Rectangle
 	ctx.fillStyle = "#E86262";
 	ctx.fillRect(mouse.x, mouse.y, 100, 100);
 
 	// Blue Rectangle
 	ctx.fillStyle = "#92ABEA";
-	ctx.fillRect(canvas.width / 2 - 50, canvas.height / 2 - 50, 100, 100);
+	ctx.fillRect(blueRectX, canvas.height / 2 - 50, 100, 100);
 
 	// ctx.fillText("HTML CANVAS BOILERPLATE", mouse.x, mouse.y);
 
